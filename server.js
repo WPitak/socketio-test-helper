@@ -46,11 +46,18 @@ const tryPort = async (server, maxPort, basePort) => {
 }
 
 const extensionMethods = {
+  /**
+   * Find available port in range and start server, result is assigned to 'endpoint' property
+   */
   async start () {
     const port = await tryPort(this.httpServer, this.maxPort, this.basePort)
     this.endpoint = `http://localhost:${port}`
     debug(`server is listening on port ${port}`)
   },
+  /**
+   * Create Promise of closing server
+   * @return {Promise}
+   */
   stop () {
     return new Promise((resolve, reject) => {
       const address = this.httpServer.address()
