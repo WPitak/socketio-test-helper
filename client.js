@@ -2,6 +2,9 @@ const Client = require('socket.io-client')
 const debug = require('debug')('socketio-test:client')
 
 const extensionMethods = {
+  /**
+   * Create Promise of connecting client
+   */
   start () {
     debug(`attempt to connect to ${this.io.uri}`)
     return new Promise((resolve, reject) => {
@@ -25,6 +28,9 @@ const extensionMethods = {
       this.connect()
     })
   },
+  /**
+   * Create Promise of disconnecting client
+   */
   stop () {
     return new Promise((resolve, reject) => {
       if (this.disconnected) {
@@ -38,6 +44,14 @@ const extensionMethods = {
       this.disconnect()
     })
   },
+  /**
+   * Create Promise wrapper for event listener's response assuming acknowledge function format of (error, data) => {...}
+   * @param {string} message - event name
+   * @param {any[]} args - arguments to supply to event listener
+   * @return {Promise} Promise wrapping result of acknowledge function
+   * reject with first argument if not null
+   * resolve to second argument otherwise
+   */
   emitPromise (message, ...args) {
     return new Promise((resolve, reject) => {
       this.emit(message, ...args, (error, data) => {
