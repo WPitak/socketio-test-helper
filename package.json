@@ -1,0 +1,24 @@
+{
+  "name": "socketio-test-helper",
+  "version": "1.0.0",
+  "description": "Helper functions for creating/starting/stopping socket.io server and client for testing purpose",
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "main": "index.js",
+  "author": "WPitak <w.pitaknitinun@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest \"(?!(node_modules/)).*\\.test\\.js$\"",
+    "test:watch": "jest \"(?!(node_modules/)).*\\.test\\.js$\" --watch"
+  },
+  "devDependencies": {
+    "jest": "^22.0.4",
+    "standard": "^10.0.3"
+  },
+  "dependencies": {
+    "debug": "^3.1.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
+  }
+}
