@@ -52,6 +52,23 @@ describe('client helper', () => {
       }
     })
   })
+  describe('oncePromise', () => {
+    it('resolves if received falsy first argument in listener', async () => {
+      const client = Client(io.endpoint, { autoConnect: false })
+      await client.start()
+      expect.assertions(1)
+      const event = 'server_event'
+      try {
+        io.emit(event, 42, 23)
+        const result = await client.oncePromise(event)
+        expect(result).toEqual([42, 23])
+      } catch (error) {
+        throw error
+      } finally {
+        await client.stop()
+      }
+    })
+  })
   describe('stop', () => {
     it('disconnects the client', async () => {
       const client = Client(io.endpoint, { autoConnect: false })
