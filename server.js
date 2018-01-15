@@ -62,7 +62,7 @@ const extensionMethods = {
     return new Promise((resolve, reject) => {
       const address = this.httpServer.address()
       if (address) {
-        this.httpServer.close(() => {
+        this.close(() => {
           this.endpoint = null
           debug(`server stopped listening on port ${address.port}`)
           return resolve()
