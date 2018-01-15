@@ -21,8 +21,6 @@ describe('server helper', () => {
       expect(s1.httpServer.address().port).toBe(4000)
       expect(s2.httpServer.address().port).toBe(4001)
       expect(s3.httpServer.address().port).toBe(4002)
-    } catch (error) {
-      throw error
     } finally {
       await s1.stop()
       await s2.stop()
