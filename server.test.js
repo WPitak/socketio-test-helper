@@ -7,6 +7,7 @@ describe('server helper', () => {
     const s1 = Server(settings)
     const s2 = Server(settings)
     const s3 = Server(settings)
+    expect.assertions(6)
 
     try {
       await s1.start()
