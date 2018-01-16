@@ -1,6 +1,5 @@
 /* eslint-env jest */
 const Client = require('./client')
-const OriginalClient = require('socket.io-client')
 const Server = require('./server')
 
 const io = Server()
