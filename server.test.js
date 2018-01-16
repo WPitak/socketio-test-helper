@@ -86,5 +86,10 @@ describe('server helper', () => {
         }
       }
     })
+    it('returns undefined if server is not currently listening thus has no endpoint property', () => {
+      const io = Server()
+      const client = io.createClient()
+      expect(client).toBeUndefined()
+    })
   })
 })

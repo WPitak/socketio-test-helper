@@ -83,7 +83,7 @@ const extensionMethods = {
    */
   createClient (options = {}) {
     if (!this.endpoint) {
-      throw new Error('server is not currently attached to active endpoint')
+      return undefined
     }
     const defaults = {
       clientConstructor: this.clientConstructor,
