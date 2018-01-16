@@ -22,6 +22,23 @@ afterAll(async () => {
 })
 
 describe('client helper', () => {
+  describe('constructor', () => {
+    it('accepts custom base client constructor', () => {
+      const CustomClient = function CustomClient (uri, options) {
+        if (!(this instanceof CustomClient)) {
+          return new CustomClient(uri, options)
+        }
+
+        this.uri = uri
+        this.options = options
+      }
+      const client = Client('server_endpoint', { autoConnect: false, clientConstructor: CustomClient })
+      expect(client instanceof CustomClient).toBe(true)
+      expect(client.uri).toBe('server_endpoint')
+      expect(client.options).toMatchObject({ autoConnect: false })
+      expect(typeof client.start).toBe('function')
+    })
+  })
   describe('start', () => {
     it('connect the client', async () => {
       const client = Client(io.endpoint, { autoConnect: false })
