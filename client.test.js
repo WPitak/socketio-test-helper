@@ -52,6 +52,27 @@ describe('client helper', () => {
       }
     })
   })
+  describe('errorPromise', () => {
+    it('resolves if receive non-null first argument in acknowledgement function', async () => {
+      const client = Client(io.endpoint, { autoConnect: false })
+      await client.start()
+      const error = await client.errorPromise(message, 'x')
+      expect(error.message).toBe('not a number')
+      await client.stop()
+    })
+    it('rejects to second argument if receive null first argument in acknowledgement function', async () => {
+      const client = Client(io.endpoint, { autoConnect: false })
+      expect.assertions(1)
+      try {
+        await client.start()
+        await client.errorPromise(message, 4)
+      } catch (error) {
+        expect(error).toBe(8)
+      } finally {
+        client.stop()
+      }
+    })
+  })
   describe('oncePromise', () => {
     it('resolves if received falsy first argument in listener', async () => {
       const client = Client(io.endpoint, { autoConnect: false })

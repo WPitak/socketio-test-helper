@@ -58,6 +58,20 @@ const extensionMethods = {
     })
   },
   /**
+   * Create Promise wrapper for event listener's response assuming acknowledge function format of (error, data) => {...}
+   * Operate in opposite way to emitPromise
+   * @param {string} message - event name
+   * @param {any[]} args - arguments to supply to event listener
+   * @return {Promise} Promise wrapping result of acknowledge function
+   * resolve with first argument if not null
+   * reject with second argument otherwise
+   */
+  errorPromise (message, ...args) {
+    return new Promise((resolve, reject) => {
+      this.emit(message, ...args, (error, data) => (error ? resolve(error) : reject(data)))
+    })
+  },
+  /**
    * Create Promise wrapper with one-time listener on given event
    * @param {string} event - event name
    * @return {Promise} Promise wrapping result of listener
