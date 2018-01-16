@@ -1,7 +1,23 @@
 /* eslint-env jest */
 const Server = require('./server')
+const { Server: httpServer } = require('http')
 
 describe('server helper', () => {
+  it('accepts custom constructor function', () => {
+    const CustomServer = function CustomServer (server) {
+      if (!(this instanceof CustomServer)) {
+        return new CustomServer(server)
+      }
+
+      this.name = 'custom'
+      this.server = server
+    }
+    const server = Server({ serverConstructor: CustomServer })
+    expect(server instanceof CustomServer).toBe(true)
+    expect(server.server instanceof httpServer).toBe(true)
+    expect(server.name).toBe('custom')
+    expect(server.endpoint).toBeNull()
+  })
   it('attempts to find available port and attach server on', async () => {
     const settings = { basePort: 4000, maxAttempt: 10 }
     const s1 = Server(settings)
@@ -45,5 +61,30 @@ describe('server helper', () => {
       await s2.stop()
       await s3.stop()
     }
+  })
+  describe('createClient', () => {
+    it('creates new client which will connect to the server', async () => {
+      const io = Server()
+      const event = 'echo'
+      io.on('connection', (socket) => {
+        socket.on(event, (input, ack) => {
+          ack(null, input)
+        })
+      })
+      let client
+      expect.assertions(1)
+      try {
+        await io.start()
+        client = io.createClient()
+        await client.start()
+        const result = await client.emitPromise(event, 42)
+        expect(result).toBe(42)
+      } finally {
+        await io.stop()
+        if (client.stop) {
+          await client.stop()
+        }
+      }
+    })
   })
 })

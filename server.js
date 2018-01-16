@@ -1,5 +1,6 @@
 const http = require('http')
 const SocketIO = require('socket.io')
+const Client = require('./client')
 const debug = require('debug')('socketio-test:server')
 
 /**
@@ -73,6 +74,23 @@ const extensionMethods = {
         return resolve()
       }
     })
+  },
+  /**
+   * Create new client with server's current endpoint as uri
+   * Newly created client will not automatically attempt to connect by default
+   * @param {object} options - options to be passed to client constructor
+   * @return {object}
+   */
+  createClient (options = {}) {
+    if (!this.endpoint) {
+      throw new Error('server is not currently attached to active endpoint')
+    }
+    const defaults = {
+      clientConstructor: this.clientConstructor,
+      autoConnect: false
+    }
+    const settings = Object.assign({}, defaults, options)
+    return Client(this.endpoint, settings)
   }
 }
 
@@ -91,17 +109,20 @@ module.exports = (options = {}) => {
     maxAttempt: 1000,
     serverConstructor: SocketIO
   }
-  const { basePort, maxAttempt, serverConstructor } = Object.assign({}, defaults, options)
+  const { basePort, maxAttempt, serverConstructor, clientConstructor } = Object.assign({}, defaults, options)
   const maxPort = basePort + maxAttempt - 1
 
   // Create HTTP and IO server
   const server = http.createServer()
   const io = serverConstructor(server)
 
-  // Initialize endpoint property
-  io.endpoint = null
-  io.basePort = basePort
-  io.maxPort = maxPort
+  // Initialize custom properties
+  const members = {
+    endpoint: null,
+    basePort,
+    maxPort,
+    clientConstructor
+  }
 
-  return Object.assign(io, extensionMethods)
+  return Object.assign(io, members, extensionMethods)
 }
