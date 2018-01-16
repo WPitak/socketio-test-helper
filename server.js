@@ -85,10 +85,7 @@ const extensionMethods = {
     if (!this.endpoint) {
       return undefined
     }
-    const defaults = {
-      clientConstructor: this.clientConstructor,
-      autoConnect: false
-    }
+    const defaults = this.clientConstructor ? { clientConstructor: this.clientConstructor } : {}
     const settings = Object.assign({}, defaults, options)
     return Client(this.endpoint, settings)
   }
