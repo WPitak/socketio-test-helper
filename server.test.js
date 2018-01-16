@@ -81,7 +81,7 @@ describe('server helper', () => {
         expect(result).toBe(42)
       } finally {
         await io.stop()
-        if (client.stop) {
+        if (client && client.stop) {
           await client.stop()
         }
       }
