@@ -81,17 +81,22 @@ const extensionMethods = {
  * @param {object} options
  * @param {int} options.basePort - base port to start attempting to listen, default to 3000
  * @param {int} options.maxAttempt - number of port number increment attempt, default to 1000
+ * @param {function} options.serverConstructor - Socket.io Server constructor to use instead of built-in one
  * @return {IO.Server}
  */
 module.exports = (options = {}) => {
   // Settings
-  const basePort = options.basePort || 3000
-  const maxAttempt = options.maxAttempt || 1000
+  const defaults = {
+    basePort: 3000,
+    maxAttempt: 1000,
+    serverConstructor: SocketIO
+  }
+  const { basePort, maxAttempt, serverConstructor } = Object.assign({}, defaults, options)
   const maxPort = basePort + maxAttempt - 1
 
   // Create HTTP and IO server
   const server = http.createServer()
-  const io = SocketIO(server)
+  const io = serverConstructor(server)
 
   // Initialize endpoint property
   io.endpoint = null
