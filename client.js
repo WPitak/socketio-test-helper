@@ -92,7 +92,8 @@ const extensionMethods = {
  * @return {object}
  */
 module.exports = (uri, options = {}) => {
+  const settings = Object.assign({ autoConnect: false }, options)
   const constructor = options.clientConstructor || Client
-  const client = constructor(uri, options)
+  const client = constructor(uri, settings)
   return Object.assign(client, extensionMethods)
 }

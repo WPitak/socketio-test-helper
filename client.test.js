@@ -38,6 +38,19 @@ describe('client helper', () => {
       expect(client.options).toMatchObject({ autoConnect: false })
       expect(typeof client.start).toBe('function')
     })
+    it('creates client which does not automatically attempt to connect by default', async () => {
+      const client = Client(io.endpoint)
+      const result = await Promise.race([
+        new Promise((resolve, reject) => {
+          client.on('connect', () => reject(new Error('client automatically connect')))
+        }),
+        new Promise(resolve => {
+          setTimeout(resolve, 1000, true)
+        })
+      ])
+      expect(result).toBe(true)
+      expect(client.connected).toBe(false)
+    })
   })
   describe('start', () => {
     it('connect the client', async () => {
