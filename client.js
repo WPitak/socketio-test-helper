@@ -85,6 +85,6 @@ const extensionMethods = {
 }
 
 module.exports = (uri, options = {}) => {
-  const client = Client(uri, options)
+  const client = typeof uri === 'string' ? Client(uri, options) : uri
   return Object.assign(client, extensionMethods)
 }
