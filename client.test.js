@@ -23,32 +23,6 @@ afterAll(async () => {
 })
 
 describe('client helper', () => {
-  describe('constructor', () => {
-    const expectClient = (client) => {
-      expect(typeof client).toBe('object')
-      expect(typeof client.io.uri).toBe('string')
-      expect(typeof client.connected).toBe('boolean')
-      expect(typeof client.open).toBe('function')
-      expect(typeof client.disconnect).toBe('function')
-      expect(typeof client.on).toBe('function')
-      expect(typeof client.once).toBe('function')
-      expect(typeof client.emit).toBe('function')
-      expect(typeof client.start).toBe('function')
-      expect(typeof client.stop).toBe('function')
-      expect(typeof client.emitPromise).toBe('function')
-      expect(typeof client.errorPromise).toBe('function')
-      expect(typeof client.oncePromise).toBe('function')
-    }
-    it('accepts string uri and options', () => {
-      const client = Client(io.endpoint, { autoConnect: false })
-      expectClient(client)
-    })
-    it('accepts Socket.io Client object', () => {
-      const originalClient = OriginalClient(io.endpoint, { autoConnect: false })
-      const client = Client(originalClient)
-      expectClient(client)
-    })
-  })
   describe('start', () => {
     it('connect the client', async () => {
       const client = Client(io.endpoint, { autoConnect: false })

@@ -84,7 +84,15 @@ const extensionMethods = {
   }
 }
 
+/**
+ * Create Socket.io Client with extended capability
+ * @param {string} uri - endpoint to connect to
+ * @param {object} options - options which will be passed to client constructor
+ * @param {function} options.constructor - constructor function to be used instead of built-in one
+ * @return {object}
+ */
 module.exports = (uri, options = {}) => {
-  const client = typeof uri === 'string' ? Client(uri, options) : uri
+  const constructor = options.clientConstructor || Client
+  const client = constructor(uri, options)
   return Object.assign(client, extensionMethods)
 }
