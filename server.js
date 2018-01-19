@@ -79,6 +79,7 @@ const extensionMethods = {
    * Create new client with server's current endpoint as uri
    * Newly created client will not automatically attempt to connect by default
    * @param {object} options - options to be passed to client constructor
+   * @param {string} options.namespace - namespace to connect to, default to '/'
    * @return {object}
    */
   createClient (options = {}) {
