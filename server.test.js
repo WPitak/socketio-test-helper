@@ -86,6 +86,40 @@ describe('server helper', () => {
         }
       }
     })
+    it('accepts namespace option', async () => {
+      const io = Server()
+      const event = 'an_event'
+      io.on('connection', (socket) => {
+        socket.on(event, (ack) => {
+          ack(null, 'default_namespace')
+        })
+      })
+      io.of('/n1').on('connection', (socket) => {
+        socket.on(event, (ack) => {
+          ack(null, 'n1_namespace')
+        })
+      })
+      let c1
+      let c2
+      expect.assertions()
+      try {
+        await io.start()
+        c1 = io.createClient()
+        await c1.start()
+        const result1 = await c1.emitPromise(event)
+        expect(result1).toBe('default_namespace')
+        c2 = io.createClient({namespace: '/n1'})
+        await c2.start()
+        const result2 = await c2.emitPromise(event)
+        expect(result2).toBe('n1_namespace')
+      } finally {
+        await Promise.all([
+          io.stop(),
+          (c1 && c1.stop && c1.stop()) || Promise.resolve(),
+          (c2 && c2.stop && c2.stop()) || Promise.resolve()
+        ])
+      }
+    })
     it('returns undefined if server is not currently listening thus has no endpoint property', () => {
       const io = Server()
       const client = io.createClient()

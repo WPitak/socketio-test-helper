@@ -85,9 +85,12 @@ const extensionMethods = {
     if (!this.endpoint) {
       return undefined
     }
-    const defaults = this.clientConstructor ? { clientConstructor: this.clientConstructor } : {}
-    const settings = Object.assign({}, defaults, options)
-    return Client(this.endpoint, settings)
+    const defaults = {
+      namespace: '/'
+    }
+    const clientConstructorDefault = this.clientConstructor ? { clientConstructor: this.clientConstructor } : {}
+    const settings = Object.assign({}, defaults, clientConstructorDefault, options)
+    return Client(`${this.endpoint}${settings.namespace}`, settings)
   }
 }
 
