@@ -1,6 +1,6 @@
 {
   "name": "socketio-test-helper",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Helper functions for creating/starting/stopping socket.io server and client for testing purpose",
   "engines": {
     "node": ">=8.9.0"
